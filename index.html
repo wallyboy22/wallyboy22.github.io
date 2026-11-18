@@ -8,12 +8,12 @@
 <style>
   :root {
     --bg: #fafaf9; --text: #1c1c1a; --muted: #6b6b66; --line: #e4e4e0;
-    --chip: #f0f0ed; --chip-on: #1c1c1a; --chip-on-text: #fafaf9;
+    --card: #ffffff; --chip: #f0f0ed; --chip-on: #1c1c1a; --chip-on-text: #fafaf9;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #141413; --text: #ececea; --muted: #8e8e88; --line: #2a2a28;
-      --chip: #222220; --chip-on: #ececea; --chip-on-text: #141413;
+      --card: #1b1b19; --chip: #222220; --chip-on: #ececea; --chip-on-text: #141413;
     }
   }
   * { box-sizing: border-box; }
@@ -21,7 +21,7 @@
     margin: 0; background: var(--bg); color: var(--text);
     font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
-  main { max-width: 720px; margin: 0 auto; padding: 48px 16px 64px; }
+  main { max-width: 1080px; margin: 0 auto; padding: 48px 16px 64px; }
   h1 { font-size: 1.15rem; font-weight: 600; margin: 0 0 20px; }
 
   .filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
@@ -32,25 +32,27 @@
   .filters button[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-text); }
   .count { color: var(--muted); font-size: 13px; margin: 0 0 8px; }
 
-  ul { list-style: none; padding: 0; margin: 0; }
-  li { border-top: 1px solid var(--line); }
-  li:last-child { border-bottom: 1px solid var(--line); }
+  ul {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
   li a {
-    display: grid; grid-template-columns: 1fr auto; gap: 2px 16px;
-    padding: 14px 4px; color: inherit; text-decoration: none;
+    display: flex; flex-direction: column; height: 100%;
+    color: inherit; text-decoration: none;
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    transition: border-color .15s, box-shadow .15s;
   }
-  li a:hover .t, li a:focus-visible .t { text-decoration: underline; text-underline-offset: 3px; }
+  li a:hover { border-color: var(--muted); box-shadow: 0 4px 18px rgba(0,0,0,.08); }
   li a:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
-  .t { font-weight: 550; }
-  .d { color: var(--muted); font-size: 14px; grid-column: 1; }
-  .tags { grid-column: 2; grid-row: 1 / span 2; align-self: center; display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+  .img { aspect-ratio: 16 / 10; background: var(--chip); border-bottom: 1px solid var(--line); overflow: hidden; }
+  .img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .3s; }
+  li a:hover .img img { transform: scale(1.03); }
+  .body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .t { font-weight: 600; }
+  .d { color: var(--muted); font-size: 14px; }
+  .u { font: 12px ui-monospace, Consolas, monospace; color: var(--muted); word-break: break-all; }
+  .tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: auto; padding-top: 8px; }
   .tags span { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 0 8px; white-space: nowrap; }
-  .u { font: 12px ui-monospace, Consolas, monospace; color: var(--muted); grid-column: 1; word-break: break-all; margin-top: 2px; }
-
-  @media (max-width: 520px) {
-    li a { grid-template-columns: 1fr; }
-    .tags { grid-column: 1; grid-row: auto; justify-content: flex-start; margin-top: 6px; }
-  }
 </style>
 </head>
 <body>
@@ -68,42 +70,49 @@
       title: "Calculadora de Carbono (CCAL)",
       desc: "Estoques, emissões e remoções de carbono da vegetação nativa no Brasil.",
       url: "https://wallyboy22.github.io/carboncal_2-0/",
+      thumb: "thumbs/carboncal.webp",
       tags: ["carboncal", "ipam"]
     },
     {
       title: "Monitor de emissões por fogo",
       desc: "Emissões mensais de CO₂, CH₄ e N₂O por queima de vegetação, por bioma, UF e classe.",
       url: "https://wallyboy22.github.io/emiss_fire_monitor/",
+      thumb: "thumbs/emissoes.webp",
       tags: ["ipam", "mapbiomas fogo"]
     },
     {
       title: "Painel MapBiomas Fogo",
       desc: "Coleção 5.1 · 8 países.",
       url: "https://mapbiomas.github.io/brazil-fire/dashboard/",
+      thumb: "thumbs/painel.webp",
       tags: ["mapbiomas fogo"]
     },
     {
       title: "Boletim do Monitor do Fogo · Brasil",
       desc: "Boletim mensal.",
       url: "https://mapbiomas.github.io/brazil-fire/fire_monitor_highlights/brazil/",
+      thumb: "thumbs/boletim-br.webp",
       tags: ["mapbiomas fogo"]
     },
     {
       title: "Boletín del Monitor de Fuego · Perú",
       desc: "Boletín mensual.",
       url: "https://mapbiomas.github.io/brazil-fire/fire_monitor_highlights/peru/",
+      thumb: "thumbs/boletin-pe.webp",
       tags: ["mapbiomas fogo"]
     },
     {
       title: "Monitor global de fogo",
       desc: "Exploratório.",
       url: "https://mapbiomas.github.io/brazil-fire/global_analises/",
+      thumb: "thumbs/global.webp",
       tags: ["mapbiomas fogo"]
     },
     {
       title: "Legendas e paletas",
       desc: "Legendas e paletas de cores do MapBiomas Fogo.",
       url: "https://mapbiomas.github.io/brazil-fire/legends/",
+      thumb: "thumbs/legendas.webp",
       tags: ["mapbiomas fogo"]
     }
   ];
@@ -125,10 +134,13 @@
     countEl.textContent = `${shown.length} ${shown.length === 1 ? "página" : "páginas"}`;
     listEl.innerHTML = shown.map(i => `
       <li><a href="${esc(i.url)}">
-        <span class="t">${esc(i.title)}</span>
-        <span class="tags">${i.tags.map(t => `<span>${esc(t)}</span>`).join("")}</span>
-        <span class="d">${esc(i.desc)}</span>
-        <span class="u">${esc(i.url.replace(/^https:\/\//, ""))}</span>
+        <div class="img">${i.thumb ? `<img src="${esc(i.thumb)}" alt="" loading="lazy" width="640" height="400">` : ""}</div>
+        <div class="body">
+          <span class="t">${esc(i.title)}</span>
+          <span class="d">${esc(i.desc)}</span>
+          <span class="u">${esc(i.url.replace(/^https:\/\//, ""))}</span>
+          <span class="tags">${i.tags.map(t => `<span>${esc(t)}</span>`).join("")}</span>
+        </div>
       </a></li>`).join("");
   }
 

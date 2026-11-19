@@ -6,15 +6,16 @@
 <title>Páginas publicadas</title>
 <meta name="description" content="Índice de páginas e aplicações publicadas.">
 <style>
+  /* Claro por padrão, em tons pastel e terrosos; o escuro usa a mesma família, sem preto. */
   :root {
-    --bg: #fafaf9; --text: #1c1c1a; --muted: #6b6b66; --line: #e4e4e0;
-    --card: #ffffff; --chip: #f0f0ed; --chip-on: #1c1c1a; --chip-on-text: #fafaf9;
+    --bg: #f6f1e7; --text: #3b3228; --muted: #7a6c5c; --line: #e6dccb; --shadow: rgba(92, 70, 45, .12);
+    --card: #fffbf4; --chip: #efe5d4; --chip-on: #c0643f; --chip-on-text: #fffbf4;
+    color-scheme: light;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #141413; --text: #ececea; --muted: #8e8e88; --line: #2a2a28;
-      --card: #1b1b19; --chip: #222220; --chip-on: #ececea; --chip-on-text: #141413;
-    }
+  :root[data-theme="dark"] {
+    --bg: #2f2924; --text: #f0e7da; --muted: #bcad99; --line: #4d443a; --shadow: rgba(0, 0, 0, .25);
+    --card: #3a332c; --chip: #463d33; --chip-on: #e49b78; --chip-on-text: #2f2924;
+    color-scheme: dark;
   }
   * { box-sizing: border-box; }
   body {
@@ -22,7 +23,9 @@
     font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
   main { max-width: 1080px; margin: 0 auto; padding: 48px 16px 64px; }
-  h1 { font-size: 1.15rem; font-weight: 600; margin: 0 0 20px; }
+  .head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 20px; }
+  h1 { font-size: 1.15rem; font-weight: 600; margin: 0; }
+  #theme { font: 14px system-ui, sans-serif; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
 
   .filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
   .filters button {
@@ -42,7 +45,7 @@
     background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
     transition: border-color .15s, box-shadow .15s;
   }
-  li a:hover { border-color: var(--muted); box-shadow: 0 4px 18px rgba(0,0,0,.08); }
+  li a:hover { border-color: var(--muted); box-shadow: 0 4px 18px var(--shadow); }
   li a:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
   .img { aspect-ratio: 16 / 10; background: var(--chip); border-bottom: 1px solid var(--line); overflow: hidden; }
   .img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .3s; }
@@ -54,10 +57,17 @@
   .tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: auto; padding-top: 8px; }
   .tags span { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 0 8px; white-space: nowrap; }
 </style>
+<script>
+  (function () {
+    var t = new URLSearchParams(location.search).get("theme");
+    if (t !== "dark" && t !== "light") { try { t = localStorage.getItem("theme"); } catch (e) {} }
+    document.documentElement.dataset.theme = t === "dark" ? "dark" : "light";
+  })();
+</script>
 </head>
 <body>
 <main>
-  <h1>Páginas publicadas</h1>
+  <div class="head"><h1>Páginas publicadas</h1><button type="button" id="theme"></button></div>
   <div class="filters" id="filters" role="group" aria-label="Filtrar por tag"></div>
   <p class="count" id="count"></p>
   <ul id="list"></ul>
@@ -154,6 +164,19 @@
     render();
   });
 
+  const themeBtn = document.getElementById("theme");
+  function paintTheme() {
+    const dark = document.documentElement.dataset.theme === "dark";
+    themeBtn.textContent = dark ? "☀" : "☾";
+    themeBtn.title = themeBtn.ariaLabel = dark ? "Tema claro" : "Tema escuro";
+  }
+  themeBtn.addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    paintTheme();
+  });
+  paintTheme();
   render();
 </script>
 </body>
